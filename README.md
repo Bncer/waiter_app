@@ -1,4 +1,4 @@
-# korgon
+# Waiter App
 
 A new Flutter project.
 
