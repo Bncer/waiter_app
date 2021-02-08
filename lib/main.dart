@@ -20,6 +20,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final GlobalKey<FormState> _key = GlobalKey();
+
   final TextEditingController _usernameFilter = TextEditingController();
   final TextEditingController _passwordFilter = TextEditingController();
   String _username = "";
@@ -59,103 +61,145 @@ class _LoginPageState extends State<LoginPage> {
               ),
           ),
         ),
-        Container(
-          child: Column(
+        Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               _buildTitle(),
               _buildTextFields(),
-              _buildButton(),
             ],
           ),
-        ),
       ]),
-      resizeToAvoidBottomPadding: false,
     );
   }
 
   Widget _buildTitle() {
-    return Expanded(
-      child: Container(
-        child: Center(
-          child: 
-          Stack(
-            children: <Widget>[
-              // Stroked text as border.
-              Text(
-                "KYZYL-KORGON",
-                style: TextStyle(
-                  fontSize: 26,
-                  foreground: Paint()
-                    ..style = PaintingStyle.stroke
-                    ..strokeWidth = 4
-                    ..color = Colors.white,
-                  fontFamily: 'Montserrat', fontWeight: FontWeight.bold,
-                  letterSpacing: 6,
-                  shadows: <Shadow>[
-                    Shadow(
-                      offset: Offset(0.0, 6.0),
-                      color: Color.fromRGBO(0, 0, 0, 0.25),
-                    ),
-                  ]
-                ),
+    return Container(
+      child: Center(
+        child: 
+        Stack(
+          children: <Widget>[
+            // Stroked text as border.
+            Text(
+              "GUSTO bistro",
+              style: TextStyle(
+                fontSize: 26,
+                foreground: Paint()
+                  ..style = PaintingStyle.stroke
+                  ..strokeWidth = 4
+                  ..color = Colors.white,
+                fontFamily: 'Montserrat', fontWeight: FontWeight.bold,
+                letterSpacing: 6,
+                shadows: <Shadow>[
+                  Shadow(
+                    offset: Offset(0.0, 6.0),
+                    color: Color.fromRGBO(0, 0, 0, 0.25),
+                  ),
+                ]
               ),
-              // Solid text as fill.
-              Text(
-                "KYZYL-KORGON",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.bold,
-                  color: Color.fromRGBO(244, 40, 40, 1), 
-                  fontSize: 26, letterSpacing: 6,
-                ),
+            ),
+            // Solid text as fill.
+            Text(
+              "GUSTO bistro",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.bold,
+                color: Color.fromRGBO(244, 40, 40, 1), 
+                fontSize: 26, letterSpacing: 6,
               ),
-            ],
-          )
-        ),
+            ),
+          ],
+        )
       ),
-      flex: 3,
     );
   }
 
   Widget _buildTextFields() {
-    return Expanded(
-      child: Container(
-        child:  Column(
+    return Container(
+      padding: EdgeInsets.fromLTRB(25, 0, 25, 0),
+      child: Form(
+        key: _key,
+        child: Column(
           children: <Widget>[
-            Container(
-              child:  TextField(
-                controller: _usernameFilter,
-                decoration:  InputDecoration(
-                  labelText: 'Username'
+            TextField(
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+              ),
+              controller: _usernameFilter,
+              decoration:  InputDecoration(
+                labelText: 'Username',
+                labelStyle: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontFamily: 'Montserrat',
+                ),
+                enabledBorder: UnderlineInputBorder(      
+                  borderSide: BorderSide(color: Colors.white),   
+                ),  
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+                prefixIcon: const Icon(
+                  Icons.person,
+                  color: Colors.white,
                 ),
               ),
             ),
-            Container(
-              child:  TextField(
-                controller: _passwordFilter,
-                decoration:  InputDecoration(
-                  labelText: 'Password'
-                ),
-                obscureText: true,
+            TextField(
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
               ),
-            )
+              controller: _passwordFilter,
+              decoration:  InputDecoration(
+                labelText: 'Password',
+                labelStyle: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontFamily: 'Montserrat',
+                ),
+                enabledBorder: UnderlineInputBorder(      
+                  borderSide: BorderSide(color: Colors.white),   
+                ),  
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+                prefixIcon: const Icon(
+                  Icons.lock,
+                  color: Colors.white,
+                ),
+              ),
+              obscureText: true,
+            ),
+            _buildButton()
           ],
         ),
-        // padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
       ),
-      flex: 2,  
     );
   }
 
   Widget _buildButton() {
-    return Expanded(
-      child: Container(
-        padding: EdgeInsets.fromLTRB(0, 0, 0, 25),
-        child: RaisedButton(
-          child: Text("Sign In"), 
-          onPressed: _loginPressed,
+    return Container(
+      // padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+      width: 450,
+      height: 60,
+      child: RaisedButton(
+        child: Text(
+          "Sign In",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 5,
+          ),
+        ),
+        onPressed: _loginPressed,
+        elevation: 5.0,
+        color: Colors.redAccent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(17.0),
+          side: BorderSide(color: Colors.red)
         ),
       ),
-      flex: 1,
     );
   }
 
