@@ -62,10 +62,14 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
         Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            // mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              _buildTitle(),
-              _buildTextFields(),
+              Expanded(
+                child: _buildTitle(),
+              ),
+              Expanded(
+                child: _buildTextFields(),
+              ),
             ],
           ),
       ]),
@@ -75,8 +79,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget _buildTitle() {
     return Container(
       child: Center(
-        child: 
-        Stack(
+        child: Stack(
           children: <Widget>[
             // Stroked text as border.
             Text(
@@ -114,63 +117,75 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildTextFields() {
     return Container(
-      padding: EdgeInsets.fromLTRB(25, 0, 25, 0),
+      padding: EdgeInsets.fromLTRB(25, 75, 25, 0),
       child: Form(
         key: _key,
         child: Column(
           children: <Widget>[
-            TextField(
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-              ),
-              controller: _usernameFilter,
-              decoration:  InputDecoration(
-                labelText: 'Username',
-                labelStyle: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontFamily: 'Montserrat',
-                ),
-                enabledBorder: UnderlineInputBorder(      
-                  borderSide: BorderSide(color: Colors.white),   
-                ),  
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white),
-                ),
-                prefixIcon: const Icon(
-                  Icons.person,
-                  color: Colors.white,
+            Expanded(
+              child: Container(
+                child: TextField(
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                  ),
+                  controller: _usernameFilter,
+                  decoration:  InputDecoration(
+                    hintText: 'Username',
+                    hintStyle: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontFamily: 'Montserrat',
+                    ),
+                    enabledBorder: UnderlineInputBorder(      
+                      borderSide: BorderSide(color: Colors.white),   
+                    ),  
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
+                    ),
+                    prefixIcon: const Icon(
+                      Icons.person,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ),
             ),
-            TextField(
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-              ),
-              controller: _passwordFilter,
-              decoration:  InputDecoration(
-                labelText: 'Password',
-                labelStyle: TextStyle(
+          Expanded(
+            child: Container(
+              child: TextField(
+                style: TextStyle(
                   color: Colors.white,
                   fontSize: 20,
-                  fontFamily: 'Montserrat',
                 ),
-                enabledBorder: UnderlineInputBorder(      
-                  borderSide: BorderSide(color: Colors.white),   
-                ),  
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white),
+                controller: _passwordFilter,
+                decoration:  InputDecoration(
+                  hintText: 'Password',
+                  hintStyle: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontFamily: 'Montserrat',
+                  ),
+                  enabledBorder: UnderlineInputBorder(      
+                    borderSide: BorderSide(color: Colors.white),   
+                  ),  
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
+                  prefixIcon: const Icon(
+                    Icons.lock,
+                    color: Colors.white,
+                  ),
                 ),
-                prefixIcon: const Icon(
-                  Icons.lock,
-                  color: Colors.white,
-                ),
+                obscureText: true,
               ),
-              obscureText: true,
+              // padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
             ),
-            _buildButton()
+          ),
+          Expanded(
+            child: _buildButton(),
+            flex: 3,
+          ),
           ],
         ),
       ),
@@ -179,27 +194,34 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildButton() {
     return Container(
-      // padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-      width: 450,
-      height: 60,
-      child: RaisedButton(
-        child: Text(
-          "Sign In",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 5,
+      child: ListView(
+        children: <Widget>[
+          SizedBox(
+            width: double.infinity,
+            height: 60.0,
+            // padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+            child: RaisedButton(
+              child: Text(
+                "Sign In",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 5,
+                ),
+              ),
+              onPressed: _loginPressed,
+              elevation: 5.0,
+              color: Colors.redAccent,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(17.0),
+                side: BorderSide(color: Colors.red)
+              ),
+            ),
           ),
-        ),
-        onPressed: _loginPressed,
-        elevation: 5.0,
-        color: Colors.redAccent,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(17.0),
-          side: BorderSide(color: Colors.red)
-        ),
+        ],
       ),
+      padding: EdgeInsets.only(top:30)
     );
   }
 

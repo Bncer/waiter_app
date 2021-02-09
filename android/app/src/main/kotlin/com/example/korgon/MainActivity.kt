@@ -1,4 +1,4 @@
-package com.example.korgon
+package com.example.waiter_app
 
 import io.flutter.embedding.android.FlutterActivity
 
