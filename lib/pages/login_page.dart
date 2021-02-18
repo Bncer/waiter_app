@@ -4,6 +4,7 @@ import 'package:waiter_app/components/input_field.dart';
 import 'package:waiter_app/components/password_field.dart';
 import 'package:waiter_app/components/stroked_title.dart';
 import 'package:waiter_app/requests/login_api.dart';
+import 'package:waiter_app/pages/home_page.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -80,6 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                       _password = _passwordFilter.text;
                       _key.currentState.save();
                       loginAndGetMenu(_username, _password);
+                      Navigator.pushReplacementNamed(context, '/home');
                     }
                   }),
               flex: 3,
