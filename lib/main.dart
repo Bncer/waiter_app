@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:waiter_app/pages/home_page.dart';
 import 'package:waiter_app/pages/login_page.dart';
 
 void main() {
@@ -10,7 +11,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Waiter App',
-      home: LoginPage(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => LoginPage(),
+        '/home': (context) => HomePage(),
+      },
     );
   }
 }
