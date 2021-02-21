@@ -1,10 +1,40 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+import 'package:waiter_app/constants.dart';
 import 'package:waiter_app/components/rounded_button.dart';
 import 'package:waiter_app/components/input_field.dart';
 import 'package:waiter_app/components/password_field.dart';
 import 'package:waiter_app/components/stroked_title.dart';
-import 'package:waiter_app/requests/login_api.dart';
-import 'package:waiter_app/pages/home_page.dart';
+import 'package:waiter_app/services/storage.dart';
+
+void displayDialog(context, title, text) => showDialog(
+      context: context,
+      builder: (context) =>
+          AlertDialog(title: Text(title), content: Text(text)),
+    );
+
+Future fetchToken(
+    BuildContext context, String username, String password) async {
+  final http.Response response = await http.post(
+    Uri.encodeFull(baseUrl + 'api-token-auth/'),
+    headers: <String, String>{
+      'Accept': 'application/json',
+      'Charset': 'utf-8',
+    },
+    body: {'username': username, 'password': password},
+  );
+  if (response.statusCode == 200) {
+    Map<String, dynamic> responseJson =
+        json.decode(utf8.decode(response.bodyBytes));
+    secureStorage.writeSecureData('token', responseJson['token']);
+    Navigator.pushReplacementNamed(context, '/home');
+  } else {
+    displayDialog(context, "Ошибка!",
+        "Не найден аккаунт с таким пользвателем и паролем!");
+  }
+}
 
 class LoginPage extends StatefulWidget {
   @override
@@ -80,8 +110,7 @@ class _LoginPageState extends State<LoginPage> {
                       _username = _usernameFilter.text;
                       _password = _passwordFilter.text;
                       _key.currentState.save();
-                      loginAndGetMenu(_username, _password);
-                      Navigator.pushReplacementNamed(context, '/home');
+                      fetchToken(context, _username, _password);
                     }
                   }),
               flex: 3,
