@@ -14,7 +14,7 @@ class RoundedButton extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               height: 60.0,
-              child: RaisedButton(
+              child: ElevatedButton(
                 child: Text(
                   text,
                   style: TextStyle(
@@ -24,12 +24,13 @@ class RoundedButton extends StatelessWidget {
                     letterSpacing: 5,
                   ),
                 ),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.redAccent,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(17.0),
+                      side: BorderSide(color: Colors.red)),
+                ),
                 onPressed: press,
-                elevation: 5.0,
-                color: Colors.redAccent,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(17.0),
-                    side: BorderSide(color: Colors.red)),
               ),
             ),
           ],

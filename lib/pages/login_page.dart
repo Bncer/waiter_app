@@ -31,8 +31,7 @@ Future fetchToken(
     secureStorage.writeSecureData('token', responseJson['token']);
     Navigator.pushReplacementNamed(context, '/home');
   } else {
-    displayDialog(context, "Ошибка!",
-        "Не найден аккаунт с таким пользвателем и паролем!");
+    displayDialog(context, "Error!", "No such account and/or password!");
   }
 }
 
