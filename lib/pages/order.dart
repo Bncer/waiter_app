@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:grouped_list/grouped_list.dart';
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -106,7 +107,7 @@ class MenuItem {
   }
   @override
   String toString() {
-    return 'MenuItem: {name: $name, weight: $weight, price: $price, category: $category}';
+    return '{name: $name, weight: $weight, price: $price, category: $category}';
   }
 }
 
@@ -116,12 +117,33 @@ class Menu extends StatefulWidget {
 }
 
 class _MenuState extends State<Menu> {
+  int initNumber;
   Future<MenuModel> futureMenu;
   final FlutterSecureStorage secureStorage = FlutterSecureStorage();
+
+  Color _iconColor = Colors.black;
+
+  int _currentCount;
+
   @override
   void initState() {
+    _currentCount = initNumber ?? 0;
     super.initState();
     futureMenu = fetchMenu(secureStorage);
+  }
+
+  void _increment() {
+    setState(() {
+      _currentCount++;
+    });
+  }
+
+  void _decrement() {
+    setState(() {
+      if (_currentCount > 0) {
+        _currentCount--;
+      }
+    });
   }
 
   @override
@@ -130,7 +152,7 @@ class _MenuState extends State<Menu> {
       future: futureMenu,
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         }
         if (!snapshot.hasData) {
           return Text("We don't have the data");
@@ -138,20 +160,66 @@ class _MenuState extends State<Menu> {
           return Text("${snapshot.error}");
         }
         print(snapshot.data.items);
-        return ListView.builder(
-            itemCount: snapshot.data.items.length,
-            itemBuilder: (BuildContext context, int i) {
-              String name = snapshot.data.items[i].name;
-              int weight = snapshot.data.items[i].weight;
-              int price = snapshot.data.items[i].price;
-              String category = snapshot.data.items[i].category;
-              return ListTile(
-                leading: Text('$category'),
-                title: Text(
-                  name ?? 'default value',
+        return GroupedListView<dynamic, String>(
+          elements: snapshot.data.items,
+          groupBy: (element) => element.category,
+          groupComparator: (value1, value2) => value2.compareTo(value1),
+          itemComparator: (item1, item2) => item1.name.compareTo(item2.name),
+          order: GroupedListOrder.ASC,
+          useStickyGroupSeparators: true,
+          groupSeparatorBuilder: (String value) => Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              value,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ),
+          itemBuilder: (c, element) {
+            return Card(
+              elevation: 5.0,
+              margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+              child: Container(
+                child: ListTile(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                  title: Text(element.name),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      IconButton(
+                          icon: Icon(Icons.remove),
+                          onPressed: () => _decrement()),
+                      Container(
+                        margin: const EdgeInsets.all(5.0),
+                        padding: const EdgeInsets.all(10.0),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.black),
+                        ),
+                        child: Text(_currentCount.toString()),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.add),
+                        onPressed: () => _increment(),
+                      ),
+                      IconButton(
+                          icon:
+                              Icon(Icons.check, color: _iconColor, size: 35.0),
+                          onPressed: () {
+                            setState(() {
+                              _iconColor = _iconColor == Colors.greenAccent
+                                  ? Colors.black
+                                  : Colors.greenAccent;
+                            });
+                          }),
+                    ],
+                  ),
                 ),
-              );
-            });
+              ),
+            );
+          },
+        );
       },
     );
   }
